@@ -1,29 +1,41 @@
-//package com.vinit.coursecatalog.service
+package com.vinit.coursecatalog.service
 //
+//import com.ninjasquad.springmockk.MockkBean
 //import com.vinit.coursecatalog.dto.CourseDTO
+//import com.vinit.coursecatalog.entity.Course
 //import com.vinit.coursecatalog.repository.CourseRepository
 //import io.kotlintest.shouldBe
+//import io.mockk.MockKAnnotations
+//import io.mockk.coJustRun
+//import io.mockk.justRun
 //import io.mockk.mockk
-//import io.mockk.mockkClass
+//import kotlinx.coroutines.ExperimentalCoroutinesApi
+//import kotlinx.coroutines.runBlocking
+//import kotlinx.coroutines.test.runBlockingTest
+//import org.junit.jupiter.api.BeforeEach
 //import org.junit.jupiter.api.Test
-//import org.junit.jupiter.api.extension.ExtendWith
-//import org.mockito.junit.jupiter.MockitoExtension
-//import org.springframework.beans.factory.annotation.Autowired
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 //
-//@Test
+//
+//@ExperimentalCoroutinesApi
 //private class CourseServiceTest {
-////    @Autowired
-////    lateinit var courseRepository: CourseRepository
-//
-//    fun `should return course deatils after successfully adding a course to Db`(){
-//        val courseRepository  = mockk<CourseRepository>()
+//    @Test
+//    fun `should return course deatils after successfully adding a course to Db`() = runBlockingTest{
+//        val courseRepository = mockk<CourseRepository>()
 //        val courseService = CourseService(courseRepository)
 //        val courseDTO = CourseDTO(
 //            name = "Docker",
-//            id = "001".toInt(),
+//            id = null,
 //            category = "Infra"
 //        )
+//        val courseEntity = courseDTO.let{
+//            Course(
+//                it.id,
+//                it.name,
+//                it.category
+//            )
+//        }
+//
+//        coJustRun { courseRepository.save(any()) }
 //
 //        courseService.addCourse(courseDTO) shouldBe courseDTO
 //

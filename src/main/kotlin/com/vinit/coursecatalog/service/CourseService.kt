@@ -1,5 +1,6 @@
 package com.vinit.coursecatalog.service
 
+
 import com.vinit.coursecatalog.dto.CourseDTO
 import com.vinit.coursecatalog.entity.Course
 import com.vinit.coursecatalog.repository.CourseRepository
@@ -24,6 +25,16 @@ class CourseService(val courseRepository: CourseRepository) {
                 it.name,
                 it.id,
                 it.category
+            )
+        }
+    }
+
+    fun getAllCourses():List<CourseDTO> {
+        return courseRepository.findAll().map{
+            CourseDTO(
+                name = it.name,
+                id = it.id,
+                category = it.category
             )
         }
     }

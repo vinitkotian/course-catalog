@@ -24,6 +24,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	//logging
 	implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+	//Reactive
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("org.postgresql:postgresql")
 
@@ -35,6 +37,10 @@ dependencies {
 	testImplementation("io.mockk:mockk:1.10.0")
 	testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testImplementation("io.kotlintest:kotlintest-assertions:3.4.2") //Assertions shouldBe etc.
+
+	//Async testing
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+
 
 }
 
