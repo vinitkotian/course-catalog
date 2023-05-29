@@ -5,7 +5,6 @@ import com.vinit.coursecatalog.dto.CourseDTO
 import com.vinit.coursecatalog.entity.Course
 import com.vinit.coursecatalog.exceptions.CourseNotFoundException
 import com.vinit.coursecatalog.repository.CourseRepository
-import java.util.Optional
 import mu.KLogging
 import org.springframework.stereotype.Service
 
@@ -55,6 +54,18 @@ class CourseService(val courseRepository: CourseRepository) {
                         name = it.name,
                         category = it.category
                     )
+            }
+        }else{
+            throw CourseNotFoundException("Requested course not found for Id : $courseId")
+        }
+    }
+
+    fun deleteCourseById(courseId: Int) {
+        val existingCourseEntity = courseRepository.findById(courseId)
+
+        if(existingCourseEntity.isPresent){
+            existingCourseEntity.get().let{
+                courseRepository.deleteById(courseId)
             }
         }else{
             throw CourseNotFoundException("Requested course not found for Id : $courseId")

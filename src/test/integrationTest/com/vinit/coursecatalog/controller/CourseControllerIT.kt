@@ -94,4 +94,17 @@ class CourseControllerIT {
         updatedCourse!!.category shouldBe updateCourseRequest.category
         updatedCourse.id shouldBe existingCourseEntity.id
     }
+
+    @Test
+    fun `should delete course by requested course id`() {
+        val existingCourseEntity = courseRepository.save(
+            Course(id=null,name="course_name_1",category="category_1")
+        )
+
+        webTestClient
+            .delete()
+            .uri("v1/courses/{courseId}",existingCourseEntity.id)
+            .exchange()
+            .expectStatus().isNoContent
+    }
 }

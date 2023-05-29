@@ -3,8 +3,10 @@ package com.vinit.coursecatalog.controller
 import com.vinit.coursecatalog.dto.CourseDTO
 import com.vinit.coursecatalog.service.CourseService
 import io.kotlintest.shouldBe
+import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 
@@ -66,5 +68,21 @@ class CourseControllerTest {
         } returns courseDTO
 
         courseController.updateCourse(courseDTO,courseId) shouldBe courseDTO
+    }
+
+    @Test
+    fun `should call delete service with requested course id`() {
+        val courseId = 1
+        val courseService = mockk<CourseService>()
+        val courseController = CourseController(courseService)
+
+        val deleteCourseIdSlot = slot<Int>()
+        coJustRun {
+            courseService.deleteCourseById(capture(deleteCourseIdSlot))
+        }
+
+        courseController.deleteCourseById(courseId)
+
+        deleteCourseIdSlot.captured shouldBe courseId
     }
 }
