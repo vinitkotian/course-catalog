@@ -49,4 +49,22 @@ class CourseControllerTest {
 
         courseController.getAllCourses() shouldBe courseList
     }
+
+    @Test
+    fun `should return updated course in Db`() {
+        val courseServiceMock = mockk<CourseService>()
+        val courseController  = CourseController(courseServiceMock)
+        val courseId = "001".toInt()
+        val courseDTO = CourseDTO(
+            name = "Kubernetes",
+            id = null,
+            category = "Infra"
+        )
+
+        every{
+            courseServiceMock.updateCourse(any(),any())
+        } returns courseDTO
+
+        courseController.updateCourse(courseDTO,courseId) shouldBe courseDTO
+    }
 }

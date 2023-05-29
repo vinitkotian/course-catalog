@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
 plugins {
 	id("org.springframework.boot") version "3.0.6"
 	id("io.spring.dependency-management") version "1.1.0"
@@ -38,7 +38,7 @@ dependencies {
 	testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testImplementation("io.kotlintest:kotlintest-assertions:3.4.2") //Assertions shouldBe etc.
 
-	//Async testing
+	//Reactive testing
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 
 
