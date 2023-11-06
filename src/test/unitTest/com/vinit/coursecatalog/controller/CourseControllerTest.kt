@@ -3,6 +3,7 @@ package com.vinit.coursecatalog.controller
 import com.vinit.coursecatalog.models.CourseDTO
 import com.vinit.coursecatalog.service.CourseService
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
@@ -33,6 +34,25 @@ class CourseControllerTest {
         )
 
         courseController.addCourse(requestBody) shouldBe expectedCourseDTO
+    }
+
+    @Test
+    fun `should return runtime exception`(){
+        val courseServiceMock = mockk<CourseService>()
+        val courseController = CourseController(courseServiceMock)
+        every {
+            courseServiceMock.addCourse(any())
+        } throws RuntimeException("Something went wrong")
+
+        val requestBody = CourseDTO(
+            id= null,
+            name = "React, beginners guide",
+            category = "Development"
+        )
+
+        shouldThrow<RuntimeException> {
+            courseController.addCourse(requestBody)
+        }
     }
 
     @Test

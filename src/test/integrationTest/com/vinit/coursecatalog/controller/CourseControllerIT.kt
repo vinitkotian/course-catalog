@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.test.web.reactive.server.returnResult
 import testUtils.getCourseEntityList
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,7 +28,7 @@ class CourseControllerIT {
     lateinit var courseRepository: CourseRepository
 
     @BeforeEach
-    fun setUp(){
+    fun setUp() {
         courseRepository.deleteAll()
         val courses = getCourseEntityList()
         courseRepository.saveAll(courses)
@@ -34,13 +36,13 @@ class CourseControllerIT {
 
     @Test
     fun `should add requested course to Db`() {
-       val courseDTO = CourseDTO(
-           name = "Kubernetes",
-           id = null,
-           category = "Infra"
-       )
+        val courseDTO = CourseDTO(
+            name = "Kubernetes",
+            id = null,
+            category = "Infra"
+        )
 
-       val recievedCourseDTO = webTestClient
+        val recievedCourseDTO = webTestClient
             .post()
             .uri("v1/courses/")
             .bodyValue(courseDTO)
@@ -71,17 +73,17 @@ class CourseControllerIT {
 
     @Test
     fun `should update requested course`() {
-       val existingCourseEntity = courseRepository.save(
-           Course(id=null,name="course_name_1",category="category_1")
-       )
+        val existingCourseEntity = courseRepository.save(
+            Course(id = null, name = "course_name_1", category = "category_1")
+        )
 
-       val updateCourseRequestDTO = CourseDTO(
-           id=null,name="course_name_10",category="category_10"
-       )
+        val updateCourseRequestDTO = CourseDTO(
+            id = null, name = "course_name_10", category = "category_10"
+        )
 
         val updatedCourse = webTestClient
             .put()
-            .uri("v1/courses/{courseId}",existingCourseEntity.id)
+            .uri("v1/courses/{courseId}", existingCourseEntity.id)
             .bodyValue(updateCourseRequestDTO)
             .exchange()
             .expectStatus().isOk
@@ -97,12 +99,12 @@ class CourseControllerIT {
     @Test
     fun `should delete course by requested course id`() {
         val existingCourseEntity = courseRepository.save(
-            Course(id=null,name="course_name_1",category="category_1")
+            Course(id = null, name = "course_name_1", category = "category_1")
         )
 
         webTestClient
             .delete()
-            .uri("v1/courses/{courseId}",existingCourseEntity.id)
+            .uri("v1/courses/{courseId}", existingCourseEntity.id)
             .exchange()
             .expectStatus().isNoContent
     }
@@ -115,11 +117,17 @@ class CourseControllerIT {
             category = ""
         )
 
-        webTestClient
+        val response = webTestClient
             .post()
             .uri("v1/courses/")
             .bodyValue(courseDTO)
             .exchange()
-            .expectStatus().isBadRequest
+            .expectStatus()
+            .isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        response shouldBe "Course category cannot be blank,Course name cannot be blank"
     }
 }
