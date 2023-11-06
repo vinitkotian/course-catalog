@@ -1,7 +1,7 @@
 package com.vinit.coursecatalog.service
 
 
-import com.vinit.coursecatalog.dto.CourseDTO
+import com.vinit.coursecatalog.models.CourseDTO
 import com.vinit.coursecatalog.entity.Course
 import com.vinit.coursecatalog.exceptions.CourseNotFoundException
 import com.vinit.coursecatalog.repository.CourseRepository

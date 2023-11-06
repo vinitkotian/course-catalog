@@ -1,6 +1,6 @@
 package com.vinit.coursecatalog.controller
 
-import com.vinit.coursecatalog.dto.CourseDTO
+import com.vinit.coursecatalog.models.CourseDTO
 import com.vinit.coursecatalog.service.CourseService
 import io.kotlintest.shouldBe
 import io.mockk.coJustRun

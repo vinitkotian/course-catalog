@@ -1,8 +1,9 @@
 package com.vinit.coursecatalog.controller
 
-import com.vinit.coursecatalog.dto.CourseDTO
+import com.vinit.coursecatalog.models.CourseDTO
 import com.vinit.coursecatalog.service.CourseService
 import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,7 +20,7 @@ class CourseController(private val courseService: CourseService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addCourse(@RequestBody courseDTO: CourseDTO): CourseDTO {
+    fun addCourse(@RequestBody  @Validated courseDTO: CourseDTO): CourseDTO {
         return courseService.addCourse(courseDTO)
     }
 

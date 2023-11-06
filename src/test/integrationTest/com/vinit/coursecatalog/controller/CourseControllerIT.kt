@@ -1,7 +1,7 @@
 package com.vinit.coursecatalog.controller
 
-import com.vinit.coursecatalog.dto.CourseDTO
 import com.vinit.coursecatalog.entity.Course
+import com.vinit.coursecatalog.models.CourseDTO
 import com.vinit.coursecatalog.repository.CourseRepository
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.expectBody
 import testUtils.getCourseEntityList
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,12 +46,12 @@ class CourseControllerIT {
             .bodyValue(courseDTO)
             .exchange()
             .expectStatus().is2xxSuccessful
-            .expectBody(CourseDTO::class.java)
+            .expectBody(Course::class.java)
             .returnResult()
             .responseBody
 
         recievedCourseDTO!!.name shouldBe courseDTO.name
-        recievedCourseDTO!!.category shouldBe courseDTO.category
+        recievedCourseDTO.category shouldBe courseDTO.category
         recievedCourseDTO.id shouldNotBe null
     }
 
@@ -63,7 +62,7 @@ class CourseControllerIT {
             .uri("v1/courses/")
             .exchange()
             .expectStatus().isOk
-            .expectBodyList(CourseDTO::class.java)
+            .expectBodyList(Course::class.java)
             .returnResult()
             .responseBody
 
@@ -76,22 +75,22 @@ class CourseControllerIT {
            Course(id=null,name="course_name_1",category="category_1")
        )
 
-       val updateCourseRequest = CourseDTO(
+       val updateCourseRequestDTO = CourseDTO(
            id=null,name="course_name_10",category="category_10"
        )
 
         val updatedCourse = webTestClient
             .put()
             .uri("v1/courses/{courseId}",existingCourseEntity.id)
-            .bodyValue(updateCourseRequest)
+            .bodyValue(updateCourseRequestDTO)
             .exchange()
             .expectStatus().isOk
-            .expectBody(CourseDTO::class.java)
+            .expectBody(Course::class.java)
             .returnResult()
             .responseBody
 
-        updatedCourse!!.name shouldBe updateCourseRequest.name
-        updatedCourse!!.category shouldBe updateCourseRequest.category
+        updatedCourse!!.name shouldBe updateCourseRequestDTO.name
+        updatedCourse.category shouldBe updateCourseRequestDTO.category
         updatedCourse.id shouldBe existingCourseEntity.id
     }
 
@@ -106,5 +105,21 @@ class CourseControllerIT {
             .uri("v1/courses/{courseId}",existingCourseEntity.id)
             .exchange()
             .expectStatus().isNoContent
+    }
+
+    @Test
+    fun `should return 400 for incomplete add course request`() {
+        val courseDTO = CourseDTO(
+            name = "",
+            id = null,
+            category = ""
+        )
+
+        webTestClient
+            .post()
+            .uri("v1/courses/")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isBadRequest
     }
 }
